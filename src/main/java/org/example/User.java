@@ -1,106 +1,60 @@
 package org.example;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 public class User {
 
-private String username;
-private String userId;
-private List<String> likedCategories;
+    public String userName;
+    public String userID;
+    public Set<String> likedCategories;
+    private boolean uniqueUserID;
+    
+    private static Set<String> UID_SET = new HashSet<String>();
 
-// Constructor to store the text data of the user
-public User(String username, String userId, List<String> likedCategories) {
-    this.username = username;
-    this.userId = userId;
-    this.likedCategories = likedCategories;
-}
+    public User(String userName, String userID, List<String> likedCategories) {
+        this.userName = userName;
+        this.userID = userID;
+        this.likedCategories = new HashSet<String>(likedCategories);
 
-    // Functions:
-
-    // Getters:
+        this.uniqueUserID = !UID_SET.contains(userID);
 
     public String getUsername() {
         return username;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public List<String> getLikedCategories() {
-        return likedCategories;
-    }
-
-
-    // Validator functions :
-
-
-    public boolean isValidUsername() {
-
-
-        // Condition 1: username must not be null or empty
-        if (username == null || username.isEmpty()) {
-            return false;
-        }
-
-
-        // Condition 2: username must not start with a space
-        if (username.charAt(0) == ' ') {
-            return false;
-        }
-
-
-        // Condition 3: every character must be a letter or a space
-        for (int i = 0; i < username.length(); i++) {
-
-            // get the current character
-            char c = username.charAt(i);
-
-            // if the character is NOT a letter AND NOT a space
-            // then the username is invalid
-            if (!Character.isLetter(c) && c != ' ') {
-                return false;
+    public Map<String, ArrayList<Movie>> getRecommendations() {
+        
+        Map<String, ArrayList<Movie>> recommendations = new HashMap<>();
+        for(String category : likedCategories) {
+            if(Movie.movies.containsKey(category)) {
+                recommendations.put(category, Movie.movies.get(category));
             }
         }
 
-       // if the username satisfy all conditions
-        return true ;
+        return recommendations;
     }
 
-    public boolean isValidUserId() {
 
-        // Condition 1: userId must not be null or empty
-        if (userId == null || userId.isEmpty()) {
-            return false;
-        }
+        return Pattern.matches("^[a-zA-Z]( |[a-zA-Z])*$", userName);
+    }
 
-        // Condition 2: userId must be exactly 9 characters
-        if (userId.length() != 9) {
-            return false;
-        }
+    public boolean isValidUserID() {
+        
+        return Pattern.matches("^[0-9]{8}([0-9]|[a-zA-Z])$",userID) && uniqueUserID;
 
-        // Condition 3: first 8 characters must ALL be digits
-        for (int i = 0; i < 8; i++) {
+    }
 
-            // get the current character
-            char c = userId.charAt(i);
-
-            // if the character is not a digit → invalid
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-
-
-        // Condition 4: last character must be a digit or a letter
-        char lastChar = userId.charAt(8);
-
-        if (!Character.isDigit(lastChar) && !Character.isLetter(lastChar)) {
-            return false;
-        }
-
-        // all conditions passed → userId is valid
-        return true;
-
+    public void save() {
+        UID_SET.add(userID);
     }
 
 
