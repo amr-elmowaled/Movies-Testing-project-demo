@@ -26,9 +26,9 @@ public class User {
         this.likedCategories = new HashSet<String>(likedCategories);
 
         this.uniqueUserID = !UID_SET.contains(userID);
-
+    }
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public Map<String, ArrayList<Movie>> getRecommendations() {
@@ -43,7 +43,7 @@ public class User {
         return recommendations;
     }
 
-
+    public boolean isValidUserName() {
         return Pattern.matches("^[a-zA-Z]( |[a-zA-Z])*$", userName);
     }
 
@@ -74,10 +74,10 @@ public class User {
             }
 
             // Condition 3: compare the two userIds
-            String checkedUserId = checkedUser.getUserId();
+            String checkedUserId = checkedUser.userID;
 
             // Condition 4: if they match → userId is not unique
-            if (checkedUserId.equals(this.userId)) {
+            if (checkedUserId.equals(this.userID)) {
                 return false;
             }
         }
