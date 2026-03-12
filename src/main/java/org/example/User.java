@@ -16,6 +16,9 @@ public class User {
     public String userName;
     public String userID;
     public Set<String> likedCategories;
+    public static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z]( |[a-zA-Z])*$");
+    public static final Pattern UID_PATTERN = Pattern.compile("^[0-9]{8}([0-9]|[a-zA-Z])$");
+
     private boolean uniqueUserID;
     
     private static Set<String> UID_SET = new HashSet<String>();
@@ -44,13 +47,12 @@ public class User {
     }
 
     public boolean isValidUserName() {
-        return Pattern.matches("^[a-zA-Z]( |[a-zA-Z])*$", userName);
+        return USERNAME_PATTERN.matcher(userName).matches();
     }
 
     public boolean isValidUserID() {
         
-        return Pattern.matches("^[0-9]{8}([0-9]|[a-zA-Z])$",userID) && uniqueUserID;
-
+        return UID_PATTERN.matcher(userID).matches() && uniqueUserID;
     }
 
     public void save() {
